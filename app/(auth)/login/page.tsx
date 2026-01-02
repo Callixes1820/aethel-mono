@@ -37,7 +37,7 @@ export default function LoginPage() {
             }
 
             // Success
-            router.push("/rooms");
+            router.push("/dashboard");
             router.refresh();
         } catch (err: any) {
             setError(err.message);
@@ -124,9 +124,6 @@ export default function LoginPage() {
                             </Button>
                         </form>
                     </CardContent>
-                    <CardFooter className="flex justify-center text-xs text-slate-500 font-medium tracking-wide uppercase pb-8">
-                        Secured Log in
-                    </CardFooter>
                 </Card>
             </NeonGradientCard>
         </div>

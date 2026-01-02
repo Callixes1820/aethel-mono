@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const formSchema = z.object({
     first_name: z.string().min(1, "First name is required"),
@@ -106,7 +107,43 @@ export function AddGuestForm({ onSuccess, initialData }: { onSuccess: () => void
                         <FormItem>
                             <FormLabel>Phone</FormLabel>
                             <FormControl>
-                                <Input placeholder="+63 912 345 6789" {...field} />
+                                <div className="flex gap-2">
+                                    <Select
+                                        defaultValue={field.value?.startsWith("+63") || !field.value ? "+63" : "02"}
+                                        onValueChange={(val) => {
+                                            const current = field.value || "";
+                                            const clean = current.replace(/^\+63\s*|^02\s*/, "").trim();
+                                            field.onChange(`${val} ${clean}`);
+                                        }}
+                                    >
+                                        <SelectTrigger className="w-[80px]">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="+63">+63</SelectItem>
+                                            <SelectItem value="02">02</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <Input
+                                        placeholder="956 345 3213"
+                                        value={field.value ? field.value.replace(/^\+63\s*|^02\s*/, "") : ""}
+                                        onChange={(e) => {
+                                            let raw = e.target.value.replace(/\D/g, ""); // Remove non-digits
+
+                                            // Format based on standard mobile length (10 digits)
+                                            if (raw.length > 10) raw = raw.slice(0, 10);
+
+                                            // Apply spacing: 956 345 3213
+                                            let formatted = raw;
+                                            if (raw.length > 3) formatted = `${raw.slice(0, 3)} ${raw.slice(3)}`;
+                                            if (raw.length > 6) formatted = `${raw.slice(0, 3)} ${raw.slice(3, 6)} ${raw.slice(6)}`;
+
+                                            // Get current prefix from value or default
+                                            const currentPrefix = field.value?.startsWith("02") ? "02" : "+63";
+                                            field.onChange(`${currentPrefix} ${formatted}`);
+                                        }}
+                                    />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>

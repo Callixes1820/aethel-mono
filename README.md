@@ -32,20 +32,20 @@ The system utilizes a relational MySQL schema with the following core entities:
 * `users` & `roles`: Manages staff accounts and permission levels.
 
 ## 🎨 Brand Identity & Philosophy
-[cite_start]The Aethel Mono identity is built on the concept of **"Elite Simplicity."** [cite: 1]
+The Aethel Mono identity is built on the concept of **"Elite Simplicity."**
 
 ### **The Name**
-* [cite_start]**Aethel (Noble):** Derived from the Old English root for 'noble,' representing a commitment to high-standard, elite hospitality[cite: 1].
-* [cite_start]**Mono (Only One):** Signifying the 'only one' system required—a singular platform standing at the pinnacle of quality and performance[cite: 1].
+* **Aethel (Noble):** Derived from the Old English root for 'noble,' representing a commitment to high-standard, elite hospitality.
+* **Mono (Only One):** Signifying the 'only one' system required—a singular platform standing at the pinnacle of quality and performance.
 
 ### **Visual Symbolism**
-* [cite_start]**The Logomark:** A bespoke monogram interlocking the letters 'A' and 'M', representing the seamless connection between guest services and operational management[cite: 1].
-* [cite_start]**The Crown:** Symbolizes the "Aethel" or noble status of the service[cite: 1].
-* [cite_start]**The Archway:** The negative space in the monogram forms an archway, a universal symbol of welcome and transition into a refined experience[cite: 1].
+* **The Logomark:** A bespoke monogram interlocking the letters 'A' and 'M', representing the seamless connection between guest services and operational management.
+* **The Crown:** Symbolizes the "Aethel" or noble status of the service.
+* **The Archway:** The negative space in the monogram forms an archway, a universal symbol of welcome and transition into a refined experience.
 
 ### **Design Assets**
-* [cite_start]**Typography:** **Montserrat** was chosen for its clean, geometric, and modern aesthetic[cite: 1].
-* [cite_start]**Color Palette:** A sophisticated mix of **Noble Bronze (`#a18460`)** and **Deep Charcoal (`#2c3436`)**[cite: 1].
+* **Typography:** **Montserrat** was chosen for its clean, geometric, and modern aesthetic.
+* **Color Palette:** A sophisticated mix of **Noble Bronze (`#a18460`)** and **Deep Charcoal (`#2c3436`)**.
 
 📄 **[View Full Brand Identity PDF](./docs/aethel_mono.pdf)**
 
@@ -73,6 +73,10 @@ This project is a baseline for a more comprehensive system. Planned features inc
 * **Expanded Reporting**: Exportable financial reports and deeper occupancy analytics.
 * **Staff Scheduling**: Internal tools for managing employee shifts and roles.
 * **Automated Communication**: Email integration for booking confirmations and loyalty updates.
+
+## DEMO
+
+- [Youtube Link](https://youtu.be/5p5Z4PO1qsc) - basic early features demo (not final design)
 
 ---
 

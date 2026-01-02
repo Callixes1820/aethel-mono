@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select"
 import { useState } from "react"
 
-const StatusCell = ({ row }: { row: any }) => {
+const StatusCell = ({ row, table }: { row: any, table: any }) => {
     const reservation = row.original;
     const [status, setStatus] = useState(reservation.res_status);
 
@@ -27,6 +27,8 @@ const StatusCell = ({ row }: { row: any }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ res_status: newStatus }),
             });
+            // Trigger refresh
+            table.options.meta?.updateData();
         } catch (error) {
             console.error("Failed to update status", error);
         }
@@ -79,7 +81,7 @@ const ActionsCell = ({ row }: { row: any }) => {
 
     return (
         <div className="flex items-center gap-2 justify-end">
-            {reservation.res_status === 'Cancelled' && (
+            {['cancelled', 'checked_out'].includes(reservation.res_status?.toLowerCase()) && (
                 <Button
                     variant="ghost"
                     size="icon"
@@ -165,7 +167,7 @@ export const columns: ColumnDef<Reservation>[] = [
     {
         accessorKey: "res_status",
         header: "Status",
-        cell: ({ row }) => <StatusCell row={row} />
+        cell: ({ row, table }) => <StatusCell row={row} table={table} />
     },
     {
         accessorKey: "total_amount",

@@ -23,7 +23,7 @@ export default function ReservationsPage() {
 
     async function fetchReservations() {
         try {
-            const res = await fetch('/api/reservations');
+            const res = await fetch('/api/reservations', { cache: 'no-store' });
             if (res.ok) {
                 const data = await res.json();
                 setReservations(data);
@@ -70,7 +70,7 @@ export default function ReservationsPage() {
             {loading ? (
                 <div className="text-center py-8 text-slate-400">Loading reservations...</div>
             ) : (
-                <DataTable columns={columns} data={reservations} />
+                <DataTable columns={columns} data={reservations} meta={{ updateData: fetchReservations }} />
             )}
         </div>
     );
