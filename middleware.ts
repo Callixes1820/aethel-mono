@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifyToken } from './lib/auth';
 
-// Paths that require authentication
+// Paths that normally require authentication
 const PROTECTED_PATHS = ['/dashboard', '/rooms', '/guests', '/reservations', '/settings'];
 
 export async function middleware(request: NextRequest) {
@@ -12,24 +11,8 @@ export async function middleware(request: NextRequest) {
     const isProtected = PROTECTED_PATHS.some(path => pathname.startsWith(path));
 
     if (isProtected) {
-        // --- COMMENT THESE LINES OUT TEMPORARILY ---
-        // const token = request.cookies.get('session')?.value;
-        // if (!token) {
-        //     const loginUrl = new URL('/login', request.url);
-        //     return NextResponse.redirect(loginUrl);
-        // }
-        // --------------------------------------------
-
-        const payload = await verifyToken(token);
-
-        if (!payload) {
-            // Invalid token
-            const loginUrl = new URL('/login', request.url);
-            return NextResponse.redirect(loginUrl);
-        }
-
-        // Token is valid, allow access
-        // We can add header info here if needed
+        // TEMPORARY FOR SHOWCASE: 
+        // Skipped the token check and redirect logic so visitors can see the dashboard.
         return NextResponse.next();
     }
 
@@ -39,14 +22,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        /*
-         * Match all request paths except for the ones starting with:
-         * - api (API routes)
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         * - login (login page)
-         */
+
         '/((?!api|_next/static|_next/image|favicon.ico|login).*)',
     ],
 };
