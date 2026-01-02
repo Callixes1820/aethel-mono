@@ -7,42 +7,50 @@ import { RecentBookings } from "@/components/dashboard/RecentBookings";
 import { AlertCircle, BedDouble, CalendarCheck, CreditCard, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-useEffect(() => {
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            // FOR SHOWCASE: We skip the API call and set dummy data directly
-            const dummyStats = {
-                totalRevenue: 125450,
-                activeBookings: 8,
-                occupancyRate: 72,
-                totalGuests: 142,
-                chartData: [
-                    { name: "Jan", total: 2400 },
-                    { name: "Feb", total: 1398 },
-                    { name: "Mar", total: 9800 },
-                    { name: "Apr", total: 3908 },
-                    { name: "May", total: 4800 },
-                    { name: "Jun", total: 3800 },
-                ],
-                recentBookings: [
-                    { id: "1", guestName: "John Doe", roomNumber: "101", status: "Confirmed", amount: 5000 },
-                    { id: "2", guestName: "Jane Smith", roomNumber: "204", status: "Checked_In", amount: 3500 },
-                ]
-            };
+export default function DashboardPage() {
+    const [stats, setStats] = useState<any>(null);
+    const [user, setUser] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [range, setRange] = useState("monthly");
 
-            setStats(dummyStats);
-            setUser({ username: "Guest Viewer" }); // Fallback for the welcome message
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                // FOR SHOWCASE: We provide static data to bypass database requirements
+                const dummyStats = {
+                    totalRevenue: 125450,
+                    activeBookings: 8,
+                    occupancyRate: 72,
+                    totalGuests: 142,
+                    chartData: [
+                        { name: "Jan", total: 2400 },
+                        { name: "Feb", total: 1398 },
+                        { name: "Mar", total: 9800 },
+                        { name: "Apr", total: 3908 },
+                        { name: "May", total: 4800 },
+                        { name: "Jun", total: 3800 },
+                    ],
+                    recentBookings: [
+                        { id: "1", guestName: "John Doe", roomNumber: "101", status: "Confirmed", amount: 5000 },
+                        { id: "2", guestName: "Jane Smith", roomNumber: "204", status: "Checked_In", amount: 3500 },
+                        { id: "3", guestName: "Robert Fox", roomNumber: "305", status: "Confirmed", amount: 4200 },
+                    ]
+                };
 
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+                setStats(dummyStats);
+                setUser({ username: "Guest Viewer" });
 
-    fetchData();
-}, [range]);
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [range]);
 
     if (loading && !stats) return (
         <div className="flex items-center justify-center h-full min-h-[400px]">
@@ -76,7 +84,6 @@ useEffect(() => {
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="bg-gradient-to-br from-violet-600 to-indigo-600 border-none shadow-lg">
-                    {/* ... (Cards content remains same, just need to ensure 'stats' exists before accessing) */}
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium text-white/90">Total Revenue</CardTitle>
                         <CreditCard className="h-4 w-4 text-white/75" />
@@ -148,7 +155,7 @@ useEffect(() => {
                         </div>
                     </CardHeader>
                     <CardContent className="pl-2">
-                        <Overview data={stats.chartData} />
+                        <Overview data={stats?.chartData || []} />
                     </CardContent>
                 </Card>
                 <Card className="col-span-3 bg-slate-900 border-slate-800 text-slate-200">
@@ -159,7 +166,7 @@ useEffect(() => {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <RecentBookings data={stats.recentBookings} />
+                        <RecentBookings data={stats?.recentBookings || []} />
                     </CardContent>
                 </Card>
             </div>
