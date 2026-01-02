@@ -12,13 +12,13 @@ export async function middleware(request: NextRequest) {
     const isProtected = PROTECTED_PATHS.some(path => pathname.startsWith(path));
 
     if (isProtected) {
-        const token = request.cookies.get('session')?.value;
-
-        if (!token) {
-            const loginUrl = new URL('/login', request.url);
-            // Optionally store the return URL
-            return NextResponse.redirect(loginUrl);
-        }
+        // --- COMMENT THESE LINES OUT TEMPORARILY ---
+        // const token = request.cookies.get('session')?.value;
+        // if (!token) {
+        //     const loginUrl = new URL('/login', request.url);
+        //     return NextResponse.redirect(loginUrl);
+        // }
+        // --------------------------------------------
 
         const payload = await verifyToken(token);
 
