@@ -16,31 +16,25 @@ export default function DashboardPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
+            setLoading(true); // Show loading state when switching ranges
             try {
-                // FOR SHOWCASE: We provide static data to bypass database requirements
-                const dummyStats = {
-                    totalRevenue: 125450,
-                    activeBookings: 8,
-                    occupancyRate: 72,
-                    totalGuests: 142,
-                    chartData: [
-                        { name: "Jan", total: 2400 },
-                        { name: "Feb", total: 1398 },
-                        { name: "Mar", total: 9800 },
-                        { name: "Apr", total: 3908 },
-                        { name: "May", total: 4800 },
-                        { name: "Jun", total: 3800 },
-                    ],
-                    recentBookings: [
-                        { id: "1", guestName: "John Doe", roomNumber: "101", status: "Confirmed", amount: 5000 },
-                        { id: "2", guestName: "Jane Smith", roomNumber: "204", status: "Checked_In", amount: 3500 },
-                        { id: "3", guestName: "Robert Fox", roomNumber: "305", status: "Confirmed", amount: 4200 },
-                    ]
-                };
+                const [statsRes, userRes] = await Promise.all([
+                    fetch(`/api/dashboard/stats?range=${range}`),
+                    fetch("/api/auth/me")
+                ]);
 
-                setStats(dummyStats);
-                setUser({ username: "Guest Viewer" });
+                if (!statsRes.ok) {
+                    const errorData = await statsRes.json().catch(() => ({}));
+                    throw new Error(errorData.error || errorData.message || "Failed to load dashboard data");
+                }
+
+                const statsData = await statsRes.json();
+                setStats(statsData);
+
+                if (userRes.ok) {
+                    const userData = await userRes.json();
+                    setUser(userData.user);
+                }
 
             } catch (err: any) {
                 setError(err.message);
@@ -84,6 +78,7 @@ export default function DashboardPage() {
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="bg-gradient-to-br from-violet-600 to-indigo-600 border-none shadow-lg">
+                    {/* ... (Cards content remains same, just need to ensure 'stats' exists before accessing) */}
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium text-white/90">Total Revenue</CardTitle>
                         <CreditCard className="h-4 w-4 text-white/75" />
@@ -155,7 +150,7 @@ export default function DashboardPage() {
                         </div>
                     </CardHeader>
                     <CardContent className="pl-2">
-                        <Overview data={stats?.chartData || []} />
+                        <Overview data={stats.chartData} />
                     </CardContent>
                 </Card>
                 <Card className="col-span-3 bg-slate-900 border-slate-800 text-slate-200">
@@ -166,7 +161,7 @@ export default function DashboardPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <RecentBookings data={stats?.recentBookings || []} />
+                        <RecentBookings data={stats.recentBookings} />
                     </CardContent>
                 </Card>
             </div>
