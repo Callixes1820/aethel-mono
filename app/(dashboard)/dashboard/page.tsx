@@ -7,44 +7,42 @@ import { RecentBookings } from "@/components/dashboard/RecentBookings";
 import { AlertCircle, BedDouble, CalendarCheck, CreditCard, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function DashboardPage() {
-    const [stats, setStats] = useState<any>(null);
-    const [user, setUser] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-    const [range, setRange] = useState("monthly");
+useEffect(() => {
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            // FOR SHOWCASE: We skip the API call and set dummy data directly
+            const dummyStats = {
+                totalRevenue: 125450,
+                activeBookings: 8,
+                occupancyRate: 72,
+                totalGuests: 142,
+                chartData: [
+                    { name: "Jan", total: 2400 },
+                    { name: "Feb", total: 1398 },
+                    { name: "Mar", total: 9800 },
+                    { name: "Apr", total: 3908 },
+                    { name: "May", total: 4800 },
+                    { name: "Jun", total: 3800 },
+                ],
+                recentBookings: [
+                    { id: "1", guestName: "John Doe", roomNumber: "101", status: "Confirmed", amount: 5000 },
+                    { id: "2", guestName: "Jane Smith", roomNumber: "204", status: "Checked_In", amount: 3500 },
+                ]
+            };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true); // Show loading state when switching ranges
-            try {
-                const [statsRes, userRes] = await Promise.all([
-                    fetch(`/api/dashboard/stats?range=${range}`),
-                    fetch("/api/auth/me")
-                ]);
+            setStats(dummyStats);
+            setUser({ username: "Guest Viewer" }); // Fallback for the welcome message
 
-                if (!statsRes.ok) {
-                    const errorData = await statsRes.json().catch(() => ({}));
-                    throw new Error(errorData.error || errorData.message || "Failed to load dashboard data");
-                }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-                const statsData = await statsRes.json();
-                setStats(statsData);
-
-                if (userRes.ok) {
-                    const userData = await userRes.json();
-                    setUser(userData.user);
-                }
-
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [range]);
+    fetchData();
+}, [range]);
 
     if (loading && !stats) return (
         <div className="flex items-center justify-center h-full min-h-[400px]">
